@@ -5,7 +5,11 @@
 * 장소 : 온라인 (zoom 이용)
 
 ## 주차별 기록
-- [ ] [1주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week01.md)
-- [ ] [2주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week02.md)
-- [ ] [3주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week03.md)
-- [ ] [4주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week04.md)
+- [ ] [1주차-01](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week01-1.md)
+- [ ] [1주차-02](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week01-2.md)
+- [ ] [2주차-01]()
+- [ ] [2주차-02]()
+- [ ] [3주차-01]()
+- [ ] [3주차-02]()
+- [ ] [4주차-01]()
+- [ ] [4주차-02]()
