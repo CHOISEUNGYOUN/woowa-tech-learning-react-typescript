@@ -4,8 +4,8 @@
 * 강사 : 우아한형제들 김민태님 (웹프론트엔드개발그룹장)
 * 장소 : 온라인 (zoom 이용)
 
-
-[ ] [1주차]()
-[ ] [2주차]()
-[ ] [3주차]()
-[ ] [4주차]()
+## 주차별 기록
+- [ ] [1주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week01.md)
+- [ ] [2주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week02.md)
+- [ ] [3주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week03.md)
+- [ ] [4주차](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week04.md)
