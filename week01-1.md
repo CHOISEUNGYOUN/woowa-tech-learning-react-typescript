@@ -97,4 +97,5 @@ React.createElement(
 )
 ```
 
-> 참고 : [리액트 공식문서 - createElement()](https://ko.reactjs.org/docs/react-api.html#createelement)
+> 레퍼런스
+- [리액트 공식문서 - createElement()](https://ko.reactjs.org/docs/react-api.html#createelement)
