@@ -88,7 +88,10 @@ function App(props) {
 }
 ```
 
-이 코드 변환되는 걸 보고 뒤통수를 맞은 듯 했다. 그렇게 아무 생각 없이 사용하던 `props` 가 `createElement` 메서드의 2 번째 인자로 들어가는 것이었다니, 리액트로 현업 개발을 하면서 이런 원리 자체에 대해 관심이 없던 과거를 반성해본다.
+이 코드 변환되는 걸 보고 정말 놀랐다. 그렇게 아무 생각 없이 사용하던 `props` 가 `createElement` 메서드의 2 번째 인자로 들어가는 거였다니, 리액트로 현업 개발을 하면서 이런 원리 자체에 대해 관심이 없이 개발만 하던 과거를 반성해본다.
+
+#### createElement
+
 ```js
 React.createElement(
   type,
@@ -97,5 +100,7 @@ React.createElement(
 )
 ```
 
-> 레퍼런스
+---
+
+### 레퍼런스
 - [리액트 공식문서 - createElement()](https://ko.reactjs.org/docs/react-api.html#createelement)
