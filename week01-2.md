@@ -218,10 +218,96 @@ async function main() {
 
 리액트 앱은 크기에 따라 수 없이 깊은 트리 형태로 이뤄져 있다. 많은 UI 컴포넌트들이 서로 data 를 주고받을 때 `Redux` 와 같은 global store 형태의 패턴을 사용하지 않으면 props, props .. 깊이만큼 전달을 반복해야 한다. 어떤 이는 리덕스를 사용하고 있다면 `data 가 최소 2 군데 이상에서 사용되어 진다면 무조건 store 에 담으라`고 말하기도 한다. 
 
-<!-- Wip: 2020.09.06 작성 중, 혼자 다시 타이핑 후 update 예정 -->
+`Redux` 는 Flux 패턴을 기반으로 1 개의 global store 에 전역에서 쓰일 상태를 저장해서 사용하는 리액트에서 가장 많이 쓰이는 전역 상태관리 방식이다. Vanilla JavaScript 로 Redux 를 만드는 과정을 순차적으로 따라갔다.(리덕스를 실제 업무에서 쓰고 있긴 하지만 따라가는데 속도가 벅찼다. 그만큼 얕게 이해하고 사용한다는 뜻 이겠지.) `createStore` 를 활용해 store 를 생성, `getState` 로 상태를 볼 수 있다.(selector 의 역할?) store 에 저장된 값은 반드시 `reducer` 함수가 호출되어 변경하며 그 방식은 `action` 을 `dispatch` 를 사용해 호출하는 방식을 말한다. 여기서 action type 과 payload 를 넘기기도 하고 `subscribe` 함수를 활용해 store 를 구독하는 `listener` 배열에 들어온 `fn` 을 dispatch 시 마다 실행한다.
 
 - `redux.js`
+```js
+export function createStore(reducer) {
+  let state;
+  const listeners = [];
+
+  const publish = () => {
+    listeners.forEach(({ subscriber, context }) => {
+      subscriber.call(context);
+    });
+  };
+
+  const dispatch = action => {
+    state = reducer(state, action);
+    publish();
+  }
+
+  const subscribe = (subscriber, context = null) => {
+    listeners.push({
+      subscriber,
+      context,
+    })
+  };
+
+  return {
+    dispatch,
+    getState,
+    subscribe,
+  }
+};
+
+export const actionCreator = (type, payload = {}) => ({
+  type,
+  payload: { ...payload },
+})
+```
+
 - `index.js`
+```js
+import { createStore, actionCreator } = from './redux';
+
+const INIT = 'init';
+const INCREMENT = 'increment';
+const DECREMENT = 'decrement';
+const RESET = 'reset';
+
+function reducer(state = {}, { type, payload }) {
+  switch (type) {
+    case INIT:
+      return {
+        ...state,
+        count: payload.count,
+      };
+    case INCREMENT:
+      return {
+        ...state,
+        count: state.count ? state.count + 1 : 1,
+      }
+    case DECREMENT:
+      return {
+        ...state,
+        count: state.count ? state.count - 1 : 0,
+      }
+    case RESET:
+      return {
+        ...state,
+        count: 0,
+      }
+    default:
+      return {
+        ...state,
+      }
+  }
+}
+
+const store = createStore(reducer);
+
+store.subscribe(() => {
+  console.log(store.getState());
+})
+
+const init = count => store.dispatch(actionCreator(INIT, { count })); // store 의 값을 payload 로 전달 받은 count 로 초기화
+const increment = () => store.dispatch(actionCreator(INCREMENT)); // count 증가
+const decrement = () => store.dispatch(actionCreator(DECREMENT)); // count 감소
+const reset = () => store.dispatch(actionCreator(RESET)); // count 를 0 으로 초기화
+```
+
+---
 
 ### 레퍼런스
 - [일급 객체(first-class-object)](https://jcsoohwancho.github.io/2019-10-18-1%EA%B8%89-%EA%B0%9D%EC%B2%B4(first-class-object)%EC%9D%B4%EB%9E%80/)
