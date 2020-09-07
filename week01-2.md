@@ -222,6 +222,8 @@ async function main() {
 
 - `redux.js`
 ```js
+
+// 액션 생성자 함수
 export function createStore(reducer) {
   let state;
   const listeners = [];
@@ -261,11 +263,13 @@ export const actionCreator = (type, payload = {}) => ({
 ```js
 import { createStore, actionCreator } = from './redux';
 
+// 액션 타입 상수
 const INIT = 'init';
 const INCREMENT = 'increment';
 const DECREMENT = 'decrement';
 const RESET = 'reset';
 
+// 실제 Redux 의 reducer 와 같다.
 function reducer(state = {}, { type, payload }) {
   switch (type) {
     case INIT:
@@ -295,8 +299,10 @@ function reducer(state = {}, { type, payload }) {
   }
 }
 
+// createStore 함수로 store 생성
 const store = createStore(reducer);
 
+// store 의 subscribe 메소드를 활용해 store 구독(getState 함수를 콘솔에서 실행)
 store.subscribe(() => {
   console.log(store.getState());
 })
