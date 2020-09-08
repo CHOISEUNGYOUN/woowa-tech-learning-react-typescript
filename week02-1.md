@@ -29,20 +29,20 @@ app(list);
 
 ### React 만들기
 
-`DOM - VDOM - js`  
+> DOM - Virtual DOM - JavaScript, 다루기 쉬운 구조(가상 돔,VDOM)를 사이에 DOM 과 js 사이에 둔다. 또한 사용성에 용이하기 위해 jsx까지 만든 것. 이를 babel 이 트랜스파일링.. 하는 일련의 과정.
 
-> 다루기 쉬운 구조(가상 돔,VDOM)를 사이에 DOM 과 js 사이에 둔다. 또한 사용성에 용이하기 위해 jsx까지 만든 것. 이를 babel 이 트랜스파일링..
+`react` 의 createElement 를 간략화한 코드.  
+`type` 은 HTML 태그의 type / `props` 는 전달할 props / `children` 은 자식 노드(배열)  
+> 가상돔을 만드는 역할, JavaScript 영역에서는 createElement 로 가상돔을 만들어주고 그건 jsx 형태로 만들며 babel 이 이를 컴파일해준다.
 
-`react` 의 createElement 를 간략화한 코드, `type` 은 태그의 type / `props` 는 전달할 props / `children` 은 자식 노드(배열)
 ```js
 function createElement(type, props, ...children) {
   return { type, props, ...children };
 }
 ```
 
-> '까다로운 문자열(html)을 객체로 바꾼다면 편리하지 않을까?' 하는 이유로 Virtual DOM 을 만들었다. 기본적인 리액트 디자인의 형태는 단 `하나의 Virtual DOM(트리 형태의 최상위)`으로 이뤄져있다.
-
-`vdom` 예시
+`vdom` 구조 형태 예시
+> '까다로운 문자열(html)을 객체로 바꾼다면 편리하지 않을까?' 하는 이유로 Virtual DOM 을 만들었다. 기본적인 리액트 디자인의 형태는 단 하나의 Virtual DOM(트리 형태의 최상위)으로 이뤄져있다.
 ```js
 const vdom = {
   type: 'ul',
@@ -57,12 +57,19 @@ const vdom = {
 }
 ```
 
-`ReactDOM.render` 함수는 vdom 을 훑으면서 real dom 으로 innerHTML 하는 역할 정도로 판단.
+`ReactDOM.render` 함수의 역할은 vdom 을 훑으면서 real dom 으로 그려주는(예를 들면 `innerHTML` 과 같은 api로).
 ```js
 ReactDOM.render(<App />, document.getElementByID("root"));
 ```
 
-최상단에 `/* @jsx createElement */` 을 넣어주면 babel 로 트랜스파일링 되는 vdom 의 역할을 줄 수 있다.(트랜스파일러의 역할)
+> 최상단에 `/* @jsx createElement */` 을 넣어주면 babel 로 트랜스파일링 되는 vdom 의 역할을 줄 수 있다.(트랜스파일러의 역할)
+```js
+/* @jsx createElement */
+
+// ...
+```
+
+---
 
 `App.js`
 ```js
@@ -93,7 +100,6 @@ render(<App />, document.getElementById("root));
 ```js
 function renderElement(node) {
   if (typeof node === 'string') {
-    // 방어 코드 추가
     return document.createTextNode(node);
   }
 
@@ -101,17 +107,17 @@ function renderElement(node) {
 
   node.childern.map(renderElement).forEach(element => {
     el.appendChild(element);
-  }); // <- Tree 형태이기에 재귀 호출이 필수, children 이 있으면 ? tree 형태의 node 를 만들 것.
+  }); // node 는 Tree 형태이기에 재귀 호출이 필요, children 이 있으면 ? tree 형태의 자식 node 를 만들 것.
   return el;
 }
 
 export function render(vdom, container) {
-  // * 실제 이 영역에서 vdom 과 비교해서 바뀐 경우만 렌더링하는 역할도 포함되어있을 것
+  // 실제 이 영역에서 vdom 과 비교해서 바뀐 경우만 렌더링하는 역할도 포함되어있을 것
 
-  container.appendChild(renderElement(vdom)); // container.appendChild(el) <- render 에서 return 된 el 이 여기에 들어가는 것.
+  container.appendChild(renderElement(vdom));
+  // container.appendChild(el) <- render 에서 return 된 el 이 여기에 들어가는 것.
 }
 
-// React.createElement(type, props, children) : 가상돔 만드는 역할, JavaScript 영역에서는 createElement 로 가상돔을 만들어주고.. 그건 jsx 형태로 만들며 babel 이 이를 컴파일해준다.
 export function createElement(type, props, ...children) {
   if (typeof type === 'function') {
     return type.apply(null, [props, ...children]); // children 의 타입이 배열이므로 apply 를 써야한다.
@@ -169,9 +175,13 @@ ReactDOM.render(<App />, document.getElementById("root"));
 
 ### useState 훅 간단한 매커니즘
 
-useState 가 어떻게 값을 기억하는가? 리액트 createElement 가 호출되는데, 어떤 함수(함수형 컴포넌트)가 내부에서 훅 계열의 함수를 호출 했다면 useState 초기값, 배열의 인덱스를 훅 전역 배열에 넣어둔다. 그 배열 안에 뭔가가 들어있지 않다면 initial 값을 인식, 뭔가 들어있다면 초기값을 무시하고 그 배열 내부를 참조한다.
+useState 가 어떻게 값을 기억하는가? 리액트 createElement 가 호출되는데, 어떤 함수(함수형 컴포넌트)가 내부에서 훅 계열의 함수를 호출 했다면 useState 초기값, 배열의 인덱스를 훅 전역 배열에 넣어둔다.  
 
-훅은 리액트 함수형 컴포넌트 내에서만 호출되어야 하고 conditional하게 호출하면 index 를 참조하지 못한다. 컴포넌트가 렌더링 된 순서대로 훅을 호출하는 것이 그 이유이다. [훅 규칙](https://ko.reactjs.org/docs/hooks-rules.html) 참조.
+만약 그 배열 안에 아무것도 들어있지 않다면 initial 값(`useState(value) 의 value`를 사용, 뭔가 들어있다면 초기값을 무시하고 그 배열 내부 인덱스를 참조한다.
+
+훅은 리액트 함수형 컴포넌트 내에서만 호출되어야 하고 conditional하게 호출하면 index 를 참조하지 못한다. 컴포넌트가 렌더링 된 순서대로 훅을 호출하는 것이 그 이유이다.
+
+[훅 규칙](https://ko.reactjs.org/docs/hooks-rules.html) 참조.
 
 ---
 
@@ -190,4 +200,4 @@ useState 가 어떻게 값을 기억하는가? 리액트 createElement 가 호�
 6. 어떤 부분이 `컴파일 타임`, 어떤 부분이 `런 타임`에 일어나는지 확실히 구분하고 이해하자. 브라우저가 직접 이해할 수 없는 언어로 개발하는 요즘 시대에는 무조건 구분할 수 있어야 한다.
 
 ### 레퍼런스
-- []()
+- [React Docs](https://ko.reactjs.org/docs)
