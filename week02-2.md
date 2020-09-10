@@ -30,6 +30,8 @@ ReactDOM.render(
 
 - 클래스형 `App.js`
 
+`Arrow Function` 은 lexical scope 를 따르기에 this 를 bind 해줄 필요가 없다.(this 가 고정된다.)
+
 ```js
 export default class App extends React.Component {
   constructor(props) {
@@ -65,12 +67,12 @@ export default class App extends React.Component {
   }
 }
 ```
- 
-- Arrow Function 은 lexical scope 를 따르기에 this 를 bind 해줄 필요가 없다.(this 가 고정된다.)
 
 ---
 
 - 함수형 `App.js`
+
+`상태(state)`는 클래스형 컴포넌트에서만 사용 가능했다. 하지만 hook(useState)이 나온 이후엔 함수형 컴포넌트도 상태를 가질 수 있다.
 
 ```js
 import React, { useState } from 'react';
@@ -95,7 +97,7 @@ const App = props => {
         <h1>React & TypeScript</h1>
       </header>
       <p>전체 세션 갯수: 4개 {displayOrder}</p>
-      <button onCLick={onToggleDisplayOrder}>재정렬</button>
+      <button onClick={onToggleDisplayOrder}>재정렬</button>
       <ul>
         {sessionList.map(session => <SessionItem title={session.title} />)}
       </ul>
@@ -106,13 +108,9 @@ const App = props => {
 export default App;
 ```
 
-- `상태(state)`는 클래스형 컴포넌트에서만 사용 가능했다. 하지만 hook(useState)이 나온 이후엔 함수형 컴포넌트도 상태를 가질 수 있다.
-
 > Session 만들어보기는 준비가 조금 덜 되어 이 정도로 간단하게 타이핑 끝내고, 다음 시간에 자료를 마련 후 다른 방향으로 진행 예정.
 
 ### 제너레이터(Generator)와 비동기(Asynchronous)
-
-동기와 비동기, 
 
 - `Promise`
 ```js
@@ -130,7 +128,9 @@ p.then(function(r) {
 
 - `제너레이터 함수(코루틴)`
 
-함수는 인자(입력값)를 받고 무언가 계산을 한 뒤에 값을 return 하는 것이다. 함수인데 return 을 여러번 할 수 있게하면 어떨까? 마지막 return 지점부터 다시 시작(반복)되는 컨셉이다. `yield` 는 제너레이터 함수의 return 과 유사하다고 생각하자. 함수를 종료시키진 않지만 정지시키고 바깥으로 내보낸다? 정도로 이해. `next` 메소드를 사용하면 다음 번 `yield` 가 있는 곳까지 실행한다. 제너레이터 함수의 특징은 return 으로 종결되지 않으니 값을 쥐고 있다는 점.
+함수는 인자(입력값)를 받고 무언가 계산을 한 뒤에 값을 return 하는 것이다. 함수인데 return 을 여러번 할 수 있게하면 어떨까? 마지막 return 지점부터 다시 시작(반복)되는 컨셉이다.
+
+`yield` 는 제너레이터 함수의 return 과 유사하다고 생각하자. 함수를 종료시키진 않지만 정지시키고 바깥으로 내보낸다? 정도로 이해. `next` 메소드를 사용하면 다음 번 `yield` 가 있는 곳까지 실행한다. 제너레이터 함수의 특징은 return 으로 종결되지 않으니 값을 쥐고 있다는 점!
 
 > `코루틴`이란 caller 가 함수를 call 하고, 함수가 caller 에게 값을 return 하면서 종료하는 것에 더해
 > return 하는 대신 suspend(혹은 yield)하면 caller 가 나중에 resume 하여 중단된 지점부터 실행을 이어갈 수 있다.
@@ -165,7 +165,10 @@ value.then(() => {
 ```
 
 - `비동기 async await`
-제너레이터 함수와 유사하다. `async` 키워드와 함께 `yield` 키워드가 await 가 된 정도? 근데 async await 는 Promise 에 최적화 되어있는 함수. 제너레이터는 Promise 비동기 뿐 아니라 다양한 케이스에서 사용이 가능하기에 응용 범위가 더 넓다. `async` 내부도 제너레이터로 이뤄져있다는 점.
+
+제너레이터 함수와 유사하다. `async` 키워드와 함께 `yield` 키워드가 await 가 된 정도.
+
+async await 는 Promise 에 최적화 되어있는 함수. 제너레이터는 Promise 비동기 뿐 아니라 다양한 케이스에서 사용이 가능하기에 응용 범위가 더 넓다. 포인트는 `async` 내부도 제너레이터로 이뤄져있다는 점!
 
 ```js
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -190,3 +193,4 @@ async function main() {
 5. `제너레이터(Generator)`는 비동기를 동기적으로 사용하기 위해 만든 것이 아니라 단지 `코루틴`이라는 매커니즘을 활용해 만든 것. 만들고 보니 `비동기를 동기처럼 사용할 수 있는 방식으로 사용이 가능하겠다.`하여 사용하는 것이지 단지 그 목적으로 만들어진 것이 아니다. 뭐가 우선인지 컨셉을 이해하는 게 정말 중요하다.
 
 ### 레퍼런스
+- []()
