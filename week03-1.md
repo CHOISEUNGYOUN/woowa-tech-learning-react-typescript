@@ -2,7 +2,7 @@
 
 ## Redux & Redux-saga
 
-### reducer 는 동기 방식 & 비동기 사용의 잘못된 예시
+### reducer 는 동기 방식
 
 - `index.js`
 ```js
@@ -42,15 +42,17 @@ store.dispatch({
 });
 ```
 
-위 'fetch-user' 예시는 비동기, 리듀서에 return 할 게 아무것도 없다.(api 의 콜백함수 내에 상태를 갖고 있기 때문에) `reducer` 는 의도했던, 의도하지 않았던 동기적으로 작동하게 되어 있다. `reducer` 가 `순수함수`(외부와 아무런 dependency, 내부에 아무런 side-effect 가 없는, [멱등성](https://ko.wikipedia.org/wiki/%EB%A9%B1%EB%93%B1%EB%B2%95%EC%B9%99#:~:text=%EB%A9%B1%EB%93%B1%EB%B2%95%EC%B9%99(%E5%86%AA%E7%AD%89%E6%B3%95%E5%89%87,%EC%95%8A%EB%8A%94%20%EC%84%B1%EC%A7%88%EC%9D%84%20%EC%9D%98%EB%AF%B8%ED%95%9C%EB%8B%A4.))여야만 한다.
+위 'fetch-user' 예시는 비동기, 리듀서에 return 할 게 아무것도 없다.(api 의 콜백함수 내에 상태를 갖고 있기 때문에)
+
+`reducer` 는 의도했던, 의도하지 않았던 동기적으로 작동하게 되어 있다. `reducer` 는 `순수함수`(외부와 아무런 dependency, 내부에 아무런 side-effect 가 없는, [멱등성](https://ko.wikipedia.org/wiki/%EB%A9%B1%EB%93%B1%EB%B2%95%EC%B9%99#:~:text=%EB%A9%B1%EB%93%B1%EB%B2%95%EC%B9%99(%E5%86%AA%E7%AD%89%E6%B3%95%E5%89%87,%EC%95%8A%EB%8A%94%20%EC%84%B1%EC%A7%88%EC%9D%84%20%EC%9D%98%EB%AF%B8%ED%95%9C%EB%8B%A4.))) 여야만 한다.
 
 ---
 
-#### Redux Middleware
+### Redux Middleware
 
-순수하지 않은 작업은 뭘까? 실행될 때 마다 결과가 일정하지 않는 작업. 대표적인 작업이 비동기 작업(api 호출)
+순수하지 않은 작업은 뭘까? 실행될 때 마다 결과가 일정하지 않는 작업, 대표적으로 비동기 작업(api 호출)
 
-`비동기 처리가 있는 side-effect 작업은 밖에서 해. 내가 놀이터를 제공해줄게.` 역할의 미들웨어를 만들어보자.
+`"비동기 처리가 있는 side-effect 작업은 밖에서 해. 내가 놀이터를 제공해줄게."` 의 역할의 미들웨어를 만들어보자.
 
 - `index.js`
 ```js
@@ -74,11 +76,11 @@ store.subscribe(() => {
   console.log(store.getState());
 });
 
+// 클로저 example
 const myMiddleware = store => dispatch => action => {
   dispatch(action);
 }
 
-// 클로저 개념
 function yourMiddleware(store) {
   return function(dispatch) {
     return function(action) {
@@ -96,7 +98,9 @@ ourMiddleware(store, store.dispatch, { type: 'inc' });
 
 ```
 
-미들웨어 관련해서는 [리덕스 공식 문서에 미들웨어에 관한 부분](https://dobbit.github.io/redux/advanced/Middleware.html)에 대해 자세히 나와있다. 꼭 읽어보자. 어차피 명강의를 들어도 계속 까먹어. 계속 읽어!(뼈. 맞 ^_ㅠ)
+미들웨어 관련해서는 [리덕스 공식 문서에 미들웨어에 관한 부분](https://dobbit.github.io/redux/advanced/Middleware.html)에 대해 자세히 나와있다. 꼭 읽어보자.
+
+어차피 명강의를 들어도 계속 까먹어. 계속 읽어!(뼈. 맞 ^_ㅠ)
 
 - `index.js`
 ```js
@@ -125,17 +129,22 @@ next(20);
 - 위 예시가 몽키패칭을 할 수 있는 구조.(함수 합성, 함수 조합, 함수 Wrapping?)
 - 인자 두 개를 함수 두 개로 쪼개는, 인자 세 개를 함수 세 개로 쪼개는 방식을 `커링(currying)` 이라고 부른다.
 
-> 미들웨어가 중간중간 개입해서 원하는 형태로 조작할 수 있게 만드는 개념이 `몽키패칭, 커링, 미들웨어 체이닝`.
+> 미들웨어가 중간중간 개입해서 원하는 형태로 조작할 수 있게 만드는 개념
+- `몽키패칭`
+- `커링`
+- `미들웨어 체이닝`
 
 ---
 
-#### 미들웨어 & 플러그인 특징
+### 미들웨어 & 플러그인 특징
 
 라이브러리 본질은 바뀌지 않고 조금 응용된 추가 기능을 사용하고 싶을 때가 있다. 그럴 때 사용하는 게 `플러그인(Plugin)` 과 `미들웨어(Middleware)`.
 
 - `데이터(data) -> 처리기 -> 출력(output)` 의 흐름(파이프라인, Pipeline) 중 `처리` 단계에서 꽂아(?) 동작시키는 소프트웨어를 `미들웨어` 라고 부른다.
 - 두 개의 차이는 플러그인은 선택적으로 사용되며, 미들웨어는 데이터(액션)가 사용하는 미들웨어 소프트웨어를 전부 거쳐간다.
 - 미들웨어 소프트웨어는 순차적으로 액션이 흐른다. 그렇기에 의존성 있는 미들웨어는 순서를 보장해주는 게 중요하다.
+
+---
 
 ### 수업 내용 외 코멘트, Q&A 기타
 
