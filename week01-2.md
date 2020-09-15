@@ -222,7 +222,6 @@ async function main() {
 
 - `redux.js`
 ```js
-
 // 액션 생성자 함수
 export function createStore(reducer) {
   let state;
