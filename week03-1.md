@@ -262,10 +262,10 @@ Increment();
 
 4. 리덕스 간단한 플로우
 ```
-1) 스토어를 통해서 `dispatch` 함수를 활용하여 `action` 을 `Redux` 에 전달한다.
+1) 스토어를 통해서 dispatch 함수를 활용하여 action 을 Redux 에 전달한다.
 2) 리덕스는 그 액션을 reducer 에 전달.
-3) 전달 받은 action, payload 기반으로 `reducer` 는 상태를 return, 그 값을 기반으로 `store` 가 업데이트.
-4) `store` 를 UI 컴포넌트가 구독(subscribe), 변경이 일어날 때마다 통지가 되어 UI 컴포넌트가 리렌더링 된다.
+3) 전달 받은 action, payload 기반으로 reducer 는 상태를 return, 그 값을 기반으로 store 가 업데이트.
+4) store 를 UI 컴포넌트가 구독(subscribe), 변경이 일어날 때마다 통지가 되어 UI 컴포넌트가 리렌더링 된다.
 ```
 
 ### 레퍼런스
