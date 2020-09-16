@@ -142,122 +142,115 @@ next(20);
 ---
 
 ### 기존 Redux 에 Middleware 추가한 전체 예시 코드
-- `redux.js`
+- `redux-middleware.js`
 ```js
-// 액션 생성자 함수
-export function createStore(reducer) {
+export function createStore(reducer, middlewares = []) {
   let state;
   const listeners = [];
-
   const publish = () => {
     listeners.forEach(({ subscriber, context }) => {
       subscriber.call(context);
     });
   };
 
-  const dispatch = action => {
+  const dispatch = (action) => {
     state = reducer(state, action);
     publish();
-  }
+  };
 
   const subscribe = (subscriber, context = null) => {
     listeners.push({
       subscriber,
-      context,
-    })
+      context
+    });
   };
 
-  return {
+  const getState = () => ({ ...state });
+  const store = {
     dispatch,
     getState,
-    subscribe,
-  }
-};
+    subscribe
+  };
+
+  middlewares = Array.from(middlewares).reverse();
+  let lastDispatch = store.dispatch;
+
+  middlewares.forEach((middleware) => {
+    lastDispatch = middleware(store)(lastDispatch);
+  });
+
+  return { ...store, dispatch: lastDispatch };
+}
 
 export const actionCreator = (type, payload = {}) => ({
   type,
-  payload: { ...payload },
-})
-
-export function applyMiddleware(store, middlewares = []) {
-  middlewares = middlewares.slice();
-  middlewares.reverse();
-
-  let dispatch = store.dispatch;
-  middlewares.forEach(
-    (middleware) => (dispatch = middleware(store)(dispatch))
-  );
-
-  return Object.assign({}, store, { dispatch });
-}
+  payload: { ...payload }
+});
 
 ```
 
 - `index.js`
 ```js
-import { createStore, actionCreator, applyMiddleware } = from './redux';
+import { createStore, actionCreator } from "./redux-middleware";
 
-// 액션 타입 상수
-const INIT = 'init';
-const INCREMENT = 'increment';
-const DECREMENT = 'decrement';
-const RESET = 'reset';
-
-// 실제 Redux 의 reducer 와 같다.
 function reducer(state = {}, { type, payload }) {
   switch (type) {
-    case INIT:
+    case "init":
       return {
         ...state,
-        count: payload.count,
+        count: payload.count
       };
-    case INCREMENT:
+    case "inc":
       return {
         ...state,
-        count: state.count ? state.count + 1 : 1,
-      }
-    case DECREMENT:
+        count: state.count + 1
+      };
+    case "reset":
       return {
         ...state,
-        count: state.count ? state.count - 1 : 0,
-      }
-    case RESET:
-      return {
-        ...state,
-        count: 0,
-      }
+        count: 0
+      };
     default:
-      return {
-        ...state,
-      }
+      return { ...state };
   }
 }
 
 const logger = (store) => (next) => (action) => {
-  console.log("logger:", action.type);
+  console.log("logger: ", action.type);
   next(action);
 };
 
 const monitor = (store) => (next) => (action) => {
   setTimeout(() => {
-    console.log("monitor:", action.type);
+    console.log("monitor: ", action.type);
     next(action);
   }, 2000);
 };
 
-const store = applyMiddleware(createStore(reducer), [logger, monitor]);
+const store = createStore(reducer, [logger, monitor]);
 
 store.subscribe(() => {
   console.log(store.getState());
-})
+});
 
-const init = count => store.dispatch(actionCreator(INIT, { count }));
-const increment = () => store.dispatch(actionCreator(INCREMENT));
-const decrement = () => store.dispatch(actionCreator(DECREMENT));
-const reset = () => store.dispatch(actionCreator(RESET));
+store.dispatch({
+  type: "init",
+  payload: {
+    count: 1
+  }
+});
+
+store.dispatch({
+  type: "inc"
+});
+
+const Reset = () => store.dispatch(actionCreator("reset"));
+const Increment = () => store.dispatch(actionCreator("inc"));
+
+Increment();
+Reset();
+Increment();
 ```
-
-진도를 끝까지 따라가지 못하여 타이핑만 진행.
 
 ### 수업 내용 외 코멘트, Q&A 기타
 
