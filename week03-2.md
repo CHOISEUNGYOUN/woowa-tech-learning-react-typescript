@@ -176,7 +176,7 @@ const root = rootSaga();
 // ...
 ```
 
-TODO: [codesandbox 예제 코드](https://codesandbox.io/s/ordermonitor04-forked-llkcw?file=/src/index.tsx) 를 기반으로 진행했으며 내부 코드 정리 타이핑은 추후 복습 예정. 
+[codesandbox 예제 코드](https://codesandbox.io/s/ordermonitor04-forked-llkcw?file=/src/index.tsx) 를 기반으로 진행했으며 내부 코드 정리 타이핑은 추후 복습 예정. 
 
 ### 수업 내용 외 코멘트, Q&A 기타
 
@@ -187,4 +187,4 @@ TODO: [codesandbox 예제 코드](https://codesandbox.io/s/ordermonitor04-forked
 3. Saga 는 UI 컴포넌트와 비즈니스 로직을 완전히 분리할 수 있어서 선호하는 사람이 많다.
 
 ### 레퍼런스
-- [예시 코드]()
+- []()

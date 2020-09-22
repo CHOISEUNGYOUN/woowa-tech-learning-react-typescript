@@ -11,5 +11,5 @@
 - [x] [2주차-02](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week02-2.md)
 - [x] [3주차-01](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week03-1.md)
 - [x] [3주차-02](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week03-2.md)
-- [ ] [4주차-01]()
+- [x] [4주차-01](https://github.com/soongyu/woowa-tech-learning-react-typescript/blob/master/week04-1.md)
 - [ ] [4주차-02]()
