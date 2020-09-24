@@ -71,6 +71,8 @@ const config = {
 
 컴파일과 트랜스파일링의 차이는 결과물에 있다. 컴파일은 기계가 아는 언어로 변환해주는 것, 트랜스파일링은 변환 후 결과물도 사람이 아는 언어로 변환되는 것. [rollup](https://rollupjs.org/guide/en/) 이나 [Parcel](https://parceljs.org/) 도 웹팩과 같은 기능을 제공하는 라이브러리다. 웹팩 공식문서에서 Get Started 를 바닐라 자바스크립트에서 하나하나 만들어보는 것이 좋다.
 
+---
+
 - `webpack.config.js` 예제 코드 전체
 ```js
 /**
@@ -158,6 +160,8 @@ const config = {
 module.exports = config;
 ```
 
+---
+
 ### React & TS Boilerplate 리뷰하기
 
 `typesafe-actions` 모듈을 사용하면 액션의 타입을 만들어줄 수 있다. createAction 으로 첫 번째 인자 `@fetch/success` 와 같은 형태로 상수를 전달. 골뱅이는 뽀대(컨벤션의 일종)다..* `getType` 을 활용해 상수를 만드는 것을 생략할 수 있다. (`redux-toolkit` 도 유사한 기능을 한다고 함)
@@ -177,6 +181,8 @@ const root = rootSaga();
 ```
 
 [codesandbox 예제 코드](https://codesandbox.io/s/ordermonitor04-forked-llkcw?file=/src/index.tsx) 를 기반으로 진행했으며 내부 코드 정리 타이핑은 추후 복습 예정. 
+
+---
 
 ### 수업 내용 외 코멘트, Q&A 기타
 
